@@ -1,0 +1,3 @@
+- [x] Change Contact page background to match Home's food-bg
+- [x] Change Menu page background to match Home's food-bg
+- [x] Change About page background to match Home's food-bg and cover full width
