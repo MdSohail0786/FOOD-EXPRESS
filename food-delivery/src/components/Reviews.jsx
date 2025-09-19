@@ -33,7 +33,7 @@ export default function Reviews() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % reviews.length);
-    }, 4000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
