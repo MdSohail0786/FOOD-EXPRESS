@@ -44,24 +44,82 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col bg-footer">
-        <nav className="bg-footer p-4 flex justify-between items-center sticky top-0 z-50 shadow-lg">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleSidebar}
-              className="text-white md:hidden focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
-            <Link
-              to="/"
-              className="text-white font-bold text-2xl tracking-widest hover:scale-110 transition-transform"
-            >
-              FoodExpress
-            </Link>
+        <nav className="bg-footer py-6 md:py-4 px-4 flex flex-col sticky top-0 z-50 shadow-lg">
+          <div className="flex justify-between items-center w-full mb-4 md:mb-0">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={toggleSidebar}
+                className="text-white md:hidden focus:outline-none"
+                aria-label="Toggle menu"
+              >
+                {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+              </button>
+              <Link
+                to="/"
+                className="text-white font-bold text-2xl tracking-widest hover:scale-110 transition-transform"
+              >
+                FoodExpress
+              </Link>
+            </div>
+
+            <div className="hidden md:flex items-center space-x-8 flex-1 justify-center">
+              <ul className="space-x-8 text-white font-semibold">
+                <li>
+                  <Link to="/" className="hover:text-button">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/about" className="hover:text-button">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/menu" className="hover:text-button">
+                    Menu
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-button">
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+              <input
+                type="text"
+                placeholder="Search menu..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="px-3 py-1 rounded bg-white bg-opacity-30 text-black placeholder-white focus:outline-none focus:ring-2 focus:ring-pink-600 ml-8"
+                aria-label="Search menu"
+              />
+            </div>
+
+            <div className="flex items-center space-x-6">
+              <button
+                onClick={toggleLogin}
+                className="text-white hover:text-button flex items-center space-x-1"
+                aria-label="Login"
+              >
+                <FaUser />
+                <span className="hidden sm:inline">Login</span>
+              </button>
+              <Link
+                to="/cart"
+                className="relative text-white hover:text-button"
+                aria-label="Cart"
+              >
+                <FaShoppingCart size={22} />
+                {cartItems.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-600 rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {cartItems.length}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
 
-          <div className="md:hidden flex-1 mx-4 relative">
+          <div className="md:hidden w-full relative">
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
             <input
               type="text"
@@ -71,61 +129,6 @@ function App() {
               className="w-full pl-10 pr-4 py-2 rounded bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:bg-opacity-30 transition"
               aria-label="Search menu"
             />
-          </div>
-
-          <ul className="hidden md:flex space-x-8 text-white font-semibold">
-            <li>
-              <Link to="/" className="hover:text-button">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="hover:text-button">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/menu" className="hover:text-button">
-                Menu
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:text-button">
-                Contact
-              </Link>
-            </li>
-          </ul>
-
-          <input
-            type="text"
-            placeholder="Search menu..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="hidden md:block px-3 py-1 rounded bg-white bg-opacity-30 text-black placeholder-white focus:outline-none focus:ring-2 focus:ring-pink-600"
-            aria-label="Search menu"
-          />
-
-          <div className="flex items-center space-x-6">
-            <button
-              onClick={toggleLogin}
-              className="text-white hover:text-button flex items-center space-x-1"
-              aria-label="Login"
-            >
-              <FaUser />
-              <span className="hidden sm:inline">Login</span>
-            </button>
-            <Link
-              to="/cart"
-              className="relative text-white hover:text-button"
-              aria-label="Cart"
-            >
-              <FaShoppingCart size={22} />
-              {cartItems.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                  {cartItems.length}
-                </span>
-              )}
-            </Link>
           </div>
         </nav>
 
@@ -177,7 +180,7 @@ function App() {
 
         {isLoginOpen && <Login onClose={toggleLogin} />}
 
-        <main className="flex-grow bg-footer">
+        <main className="flex-grow bg-footer pt-20 md:pt-0">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
