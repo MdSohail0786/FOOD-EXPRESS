@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaUser,
+  FaBars,
+  FaTimes,
+  FaSearch,
+} from "react-icons/fa";
 import Home from "./components/Home";
 import About from "./components/About";
 import Menu from "./components/Menu";
@@ -53,6 +59,18 @@ function App() {
             >
               FoodExpress
             </Link>
+          </div>
+
+          <div className="md:hidden flex-1 mx-4 relative">
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full pl-10 pr-4 py-2 rounded bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:bg-opacity-30 transition"
+              aria-label="Search menu"
+            />
           </div>
 
           <ul className="hidden md:flex space-x-8 text-white font-semibold">
@@ -115,14 +133,6 @@ function App() {
         {sidebarOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40">
             <div className="fixed top-0 left-0 w-64 h-full bg-footer p-6 z-50 shadow-lg">
-              <input
-                type="text"
-                placeholder="Search menu..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className="w-full px-3 py-2 rounded mb-6 bg-white bg-opacity-30 text-black placeholder-white focus:outline-none focus:ring-2 focus:ring-pink-600"
-                aria-label="Search menu"
-              />
               <ul className="flex flex-col space-y-6 text-white font-semibold text-lg">
                 <li>
                   <Link
