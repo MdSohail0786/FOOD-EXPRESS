@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import {
-  FaShoppingCart,
-  FaUser,
   FaBars,
   FaTimes,
   FaSearch,
+  FaUser,
+  FaShoppingCart,
 } from "react-icons/fa";
 import Home from "./components/Home";
 import About from "./components/About";
@@ -20,6 +20,14 @@ function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
 
   const addToCart = (item) => {
     setCartItems((prev) => [...prev, item]);
@@ -37,6 +45,10 @@ function App() {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -44,91 +56,97 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col bg-footer">
-        <nav className="bg-footer py-6 md:py-4 px-4 flex flex-col sticky top-0 z-50 shadow-lg">
-          <div className="flex justify-between items-center w-full mb-4 md:mb-0">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={toggleSidebar}
-                className="text-white md:hidden focus:outline-none"
-                aria-label="Toggle menu"
-              >
-                {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-              </button>
-              <Link
-                to="/"
-                className="text-white font-bold text-2xl tracking-widest hover:scale-110 transition-transform"
-              >
-                FoodExpress
-              </Link>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-8 flex-1 justify-center">
-              <ul className="space-x-8 text-white font-semibold">
-                <li>
-                  <Link to="/" className="hover:text-button">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about" className="hover:text-button">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/menu" className="hover:text-button">
-                    Menu
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-button">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-              <input
-                type="text"
-                placeholder="Search menu..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className="px-3 py-1 rounded bg-white bg-opacity-30 text-black placeholder-white focus:outline-none focus:ring-2 focus:ring-pink-600 ml-8"
-                aria-label="Search menu"
-              />
-            </div>
-
-            <div className="flex items-center space-x-6">
-              <button
-                onClick={toggleLogin}
-                className="text-white hover:text-button flex items-center space-x-1"
-                aria-label="Login"
-              >
-                <FaUser />
-                <span className="hidden sm:inline">Login</span>
-              </button>
-              <Link
-                to="/cart"
-                className="relative text-white hover:text-button"
-                aria-label="Cart"
-              >
-                <FaShoppingCart size={22} />
-                {cartItems.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-600 rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                    {cartItems.length}
-                  </span>
-                )}
-              </Link>
-            </div>
+        <nav className="bg-footer h-16 px-4 flex items-center justify-between sticky top-0 z-80 shadow-xl">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleSidebar}
+              className="text-white md:hidden focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
+            <Link
+              to="/"
+              className="text-white font-bold text-2xl tracking-widest hover:scale-110 transition-transform hidden md:block"
+            >
+              FoodExpress
+            </Link>
           </div>
 
-          <div className="md:hidden w-full relative">
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 rounded bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:bg-opacity-30 transition"
-              aria-label="Search menu"
-            />
+          <div className="hidden md:flex items-center flex-1 justify-center">
+            <ul className="flex space-x-8 text-white font-semibold">
+              <li>
+                <Link to="/" className="hover:text-button">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="hover:text-button">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/menu"
+                  className="hover:text-button transition-colors duration-300"
+                >
+                  Menu
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="hover:text-button transition-colors duration-300"
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            {isSearchOpen ? (
+              <div className="flex items-center">
+                <FaSearch size={22} className="text-white mr-2" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search menu..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  onBlur={toggleSearch}
+                  className="bg-transparent text-white placeholder-white border-b border-white focus:outline-none"
+                />
+              </div>
+            ) : (
+              <button
+                onClick={toggleSearch}
+                className="text-white hover:text-button focus:outline-none"
+                aria-label="Search"
+              >
+                <FaSearch size={22} />
+              </button>
+            )}
+            <button
+              onClick={toggleLogin}
+              className="text-white hover:text-button flex items-center space-x-1 focus:outline-none"
+              aria-label="Login"
+            >
+              <FaUser size={20} />
+              <span className="hidden sm:inline">Login</span>
+            </button>
+            <Link
+              to="/cart"
+              className="relative text-white hover:text-button focus:outline-none"
+              aria-label="Cart"
+            >
+              <FaShoppingCart size={22} />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
           </div>
         </nav>
 
@@ -136,6 +154,15 @@ function App() {
         {sidebarOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40">
             <div className="fixed top-0 left-0 w-64 h-full bg-footer p-6 z-50 shadow-lg">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-white font-bold text-xl">Menu</h3>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="text-white hover:text-button focus:outline-none"
+                >
+                  <FaTimes size={24} />
+                </button>
+              </div>
               <ul className="flex flex-col space-y-6 text-white font-semibold text-lg">
                 <li>
                   <Link
@@ -180,7 +207,7 @@ function App() {
 
         {isLoginOpen && <Login onClose={toggleLogin} />}
 
-        <main className="flex-grow bg-footer pt-20 md:pt-0">
+        <main className="flex-grow bg-footer pt-16 md:pt-0">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

@@ -116,7 +116,7 @@ export default function Menu({ addToCart, searchTerm }) {
   );
 
   return (
-    <div className="p-6 md:p-12 bg-black bg-opacity-50">
+    <div className="p-6 md:p-12 bg-black bg-opacity-50 z-[999]">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold mb-10 text-center text-pink-600">
           Our Menu
